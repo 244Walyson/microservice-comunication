@@ -1,15 +1,15 @@
 import UserRepository from "../repository/UserRepository.js";
 import * as httpStatus from "../../../config/constants/HttpStatus.js"
-import User from "../model/User.js";
 import UserException from "../exception/UserException.js";
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+import * as secrets from "../../../config/constants/Secrets.js"
 
 class UserService {
 
     async findByEmail(req) {
 
         try {
-            console.info(req.params)
-
             const { email } = req.params;
             this.validateData(email);
             let user = await UserRepository.findByEmail(email);
@@ -32,6 +32,45 @@ class UserService {
 
     }
 
+    async getAccessToken(req) {
+        try {
+            const { email, password } = req.body;
+            this.validateAccessTokenData(email, password);
+            let user = await UserRepository.findByEmail(email);
+            this.validateUserNotFound(user)
+            await this.validatePassword(password, user.password)
+            let authUser = { id: user.id, name: user.name, email: user.email };
+            const accessToken = jwt.sign({ authUser }, secrets.API_SECRET, { expiresIn: '1d'})
+            return {
+                status: httpStatus.SUCCESS,
+                accessToken,
+            }
+        } catch (err) {
+            return {
+                status: err.status ? err.status : httpStatus.INTERNAL_SERVER_ERROR,
+                message: err.message,
+            }
+        }
+    }
+
+    async validatePassword(password, hashPassword) {
+        if (!await bcrypt.compare(password, hashPassword)) {
+            throw new UserException(
+                httpStatus.UNAUTHORIZED,
+                "password does not match."
+            )
+        }
+    }
+
+    validateAccessTokenData(email, password) {
+        if (!email || !password) {
+            throw new UserException(
+                httpStatus.UNAUTHORIZED,
+                "Email and password must be informed"
+            )
+        }
+    }
+
     validateData(email) {
         if (!email) {
             throw new UserException(
@@ -40,8 +79,8 @@ class UserService {
             );
         }
     }
-    validateUserNotFound(user){
-        if(!user){
+    validateUserNotFound(user) {
+        if (!user) {
             throw new UserException(
                 httpStatus.BAD_REQUEST,
                 "User not found"
