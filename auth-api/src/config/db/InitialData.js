@@ -10,6 +10,11 @@ export const CreateInitialData = async () => {
             email: "teste@gmail.com",
             password: password,
         });
+        await User.create({
+            name: "user test 2",
+            email: "teste2@gmail.com",
+            password: password,
+        });
 
         console.log("Initial data created successfully");
     } catch (error) {

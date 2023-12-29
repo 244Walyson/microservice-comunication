@@ -11,9 +11,12 @@ class UserService {
 
         try {
             const { email } = req.params;
+            const authUser = req.authUser;
+            console.info(authUser);
             this.validateData(email);
             let user = await UserRepository.findByEmail(email);
             this.validateUserNotFound(user);
+            this.validateAuthenticateedUser(user, authUser)
             return {
                 status: httpStatus.SUCCESS,
                 user: {
@@ -30,6 +33,15 @@ class UserService {
         }
 
 
+    }
+
+    validateAuthenticateedUser(user, authUser){
+        if(!authUser || user.id !== authUser.id){
+            throw new UserException(
+                httpStatus.FORBIDDEN,
+                "You cannot see this user data"
+            )
+        }
     }
 
     async getAccessToken(req) {
