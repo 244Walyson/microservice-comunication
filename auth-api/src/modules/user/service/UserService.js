@@ -1,18 +1,19 @@
-import UserRepository from "../repository/UserRepository";
+import UserRepository from "../repository/UserRepository.js";
 import * as httpStatus from "../../../config/constants/HttpStatus.js"
 import User from "../model/User.js";
+import UserException from "../exception/UserException.js";
 
 class UserService {
 
-    async findByEmail(email) {
+    async findByEmail(req) {
 
-        try{
+        try {
+            console.info(req.params)
+
             const { email } = req.params;
             this.validateData(email);
-            let user = UserRepository.findByEmail(email);
-            if(!user){
-
-            }
+            let user = await UserRepository.findByEmail(email);
+            this.validateUserNotFound(user);
             return {
                 status: httpStatus.SUCCESS,
                 user: {
@@ -21,19 +22,30 @@ class UserService {
                     email: user.email,
                 },
             }
-        }catch(err){
+        } catch (err) {
             return {
                 status: err.status ? err.status : httpStatus.INTERNAL_SERVER_ERROR,
-                message: err.status,
+                message: err.message,
             }
         }
 
-        
+
     }
 
-    validateData(email){
-        if(!email) {
-            throw new Error("User email was not informed")
+    validateData(email) {
+        if (!email) {
+            throw new UserException(
+                httpStatus.BAD_REQUEST,
+                "User email was not informed"
+            );
+        }
+    }
+    validateUserNotFound(user){
+        if(!user){
+            throw new UserException(
+                httpStatus.BAD_REQUEST,
+                "User not found"
+            );
         }
     }
 }
