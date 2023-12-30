@@ -34,6 +34,13 @@ public class SupplierController {
         return ResponseEntity.created(uri).body(dto);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<SupplierDTO> update(@PathVariable int id, @RequestBody SupplierDTO dto){
+        dto = supplierService.update(dto, id);
+        return ResponseEntity.ok().body(dto);
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         supplierService.delete(id);

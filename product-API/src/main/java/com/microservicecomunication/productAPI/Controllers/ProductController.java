@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -15,6 +16,12 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+
+    @GetMapping
+    public ResponseEntity<List<ProductDTO>> findAll(){
+        return ResponseEntity.ok().body(productService.findAll());
+    }
 
     @PostMapping
     public ResponseEntity<ProductDTO> save(@RequestBody ProductDTO dto){
@@ -29,5 +36,10 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDTO> update(@PathVariable int id, @RequestBody ProductDTO dto){
+        dto = productService.update(dto, id);
+        return ResponseEntity.ok().body(dto);
+    }
 
 }

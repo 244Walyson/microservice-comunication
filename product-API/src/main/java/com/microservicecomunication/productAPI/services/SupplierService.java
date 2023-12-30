@@ -57,4 +57,12 @@ public class SupplierService {
             throw new ValidateException("Supplier name should not be null");
         }
     }
+
+    public SupplierDTO update(SupplierDTO dto, int id) {
+        validateSupplierDto(dto);
+        Supplier supp = supplierRepository.findById(id).get();
+        supp.setName(dto.getName());
+        supp = supplierRepository.save(supp);
+        return new SupplierDTO().dto(supp);
+    }
 }

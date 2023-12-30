@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -75,4 +76,21 @@ public class ProductService {
         }
     }
 
+    public ProductDTO update(ProductDTO dto, int id) {
+        validateProductDto(dto);
+        Product prod = productRepository.findById(id).get();
+        prod.setName(dto.getName());
+        prod.setQuantityAvailable(dto.getQuantityAvailable());
+        Category cat = new CategoryDTO().copyDtoToEntity(categoryService.findById(dto.getCategory().getId()));
+        Supplier supplier = new SupplierDTO().copyDtoToEntity(supplierService.findById(dto.getSupplier().getId()));
+        prod.setSupplier(supplier);
+        prod.setCategory(cat);
+        prod = productRepository.save(prod);
+        return new ProductDTO().dto(prod);
+    }
+
+    public List<ProductDTO> findAll() {
+        List<Product> prod = productRepository.findAll();
+        return prod.stream().map(ProductDTO::dto).toList();
+    }
 }

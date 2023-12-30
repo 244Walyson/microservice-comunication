@@ -57,4 +57,11 @@ public class CategoryService {
         }
     }
 
+    public CategoryDTO update(CategoryDTO dto, int id) {
+        validateCategoryDto(dto);
+        Category cat = categoryRepository.findById(id).get();
+        cat.setDescription(dto.getDescription());
+        categoryRepository.save(cat);
+        return new CategoryDTO().of(cat);
+    }
 }

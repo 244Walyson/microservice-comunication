@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
@@ -28,7 +29,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "CATEGORY_ID", nullable = false)
     private Category category;
-    @Column(nullable = false, updatable = false)
+    @Column(columnDefinition = "TIMESTAMP",nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
