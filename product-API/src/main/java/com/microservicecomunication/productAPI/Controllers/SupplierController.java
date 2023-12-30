@@ -34,4 +34,9 @@ public class SupplierController {
         return ResponseEntity.created(uri).body(dto);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable int id) {
+        supplierService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

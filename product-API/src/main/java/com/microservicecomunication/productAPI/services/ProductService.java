@@ -13,7 +13,10 @@ import com.microservicecomunication.productAPI.repositories.SupplierRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -35,6 +38,19 @@ public class ProductService {
         logger.info(product.toString());
         product = productRepository.save(product);
         return new ProductDTO().dto(product);
+    }
+
+    public void delete(int id){
+        try {
+            Optional<Product> product = productRepository.findById(id);
+            if (product.isPresent()) {
+                productRepository.delete(product.get());
+            } else {
+                throw new ValidateException("Entity not found");
+            }
+        }catch (DataIntegrityViolationException e){
+            throw new ValidateException("Data integrity violation exception");
+        }
     }
 
     private Product copyDtoToEntity(ProductDTO dto){

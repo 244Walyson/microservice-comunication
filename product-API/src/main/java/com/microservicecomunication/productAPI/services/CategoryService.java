@@ -34,6 +34,11 @@ public class CategoryService {
         return new CategoryDTO().of(category);
     }
 
+    public List<CategoryDTO> findByDescription(String description) {
+        List<Category> categories = categoryRepository.findAllByDescription(description);
+        return categories.stream().map(CategoryDTO::of).toList();
+    }
+
     public void delete(int id) {
         try {
             Optional<Category> category = categoryRepository.findById(id);
@@ -53,9 +58,4 @@ public class CategoryService {
         }
     }
 
-
-    public List<CategoryDTO> findByDescription(String description) {
-        List<Category> categories = categoryRepository.findAllByDescription(description);
-        return categories.stream().map(CategoryDTO::of).toList();
-    }
 }

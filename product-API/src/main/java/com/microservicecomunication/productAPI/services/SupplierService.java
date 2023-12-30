@@ -1,15 +1,18 @@
 package com.microservicecomunication.productAPI.services;
 
 import com.microservicecomunication.productAPI.dto.SupplierDTO;
+import com.microservicecomunication.productAPI.entities.Category;
 import com.microservicecomunication.productAPI.entities.Supplier;
 import com.microservicecomunication.productAPI.exception.ValidateException;
 import com.microservicecomunication.productAPI.repositories.SupplierRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SupplierService {
@@ -35,6 +38,20 @@ public class SupplierService {
         supp = supplierRepository.save(supp);
         return new SupplierDTO().dto(supp);
     }
+
+    public void delete(int id){
+        try {
+            Optional<Supplier> supplier = supplierRepository.findById(id);
+            if (supplier.isPresent()) {
+                supplierRepository.delete(supplier.get());
+            } else {
+                throw new ValidateException("Entity not found");
+            }
+        }catch (DataIntegrityViolationException e){
+            throw new ValidateException("Data integrity violation exception");
+        }
+    }
+
 
     private void validateSupplierDto(SupplierDTO dto){
         if(dto.getName().isEmpty()){
