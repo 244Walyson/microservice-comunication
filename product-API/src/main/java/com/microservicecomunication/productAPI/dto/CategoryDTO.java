@@ -1,7 +1,6 @@
 package com.microservicecomunication.productAPI.dto;
 
 import com.microservicecomunication.productAPI.entities.Category;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -11,10 +10,15 @@ public class CategoryDTO {
     private Integer id;
     private String description;
 
-    public static CategoryDTO dto(Category entity){
+    public static CategoryDTO of(Category entity){
         var dto = new CategoryDTO();
         BeanUtils.copyProperties(entity, dto);
         return dto;
     }
 
+    public static Category copyDtoToEntity(CategoryDTO dto){
+        var category = new Category();
+        category.setDescription(dto.getDescription());
+        return category;
+    }
 }
