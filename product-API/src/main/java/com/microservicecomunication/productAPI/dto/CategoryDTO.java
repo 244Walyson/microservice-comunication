@@ -18,6 +18,7 @@ public class CategoryDTO {
 
     public static Category copyDtoToEntity(CategoryDTO dto){
         var category = new Category();
+        category.setId(dto.getId());
         category.setDescription(dto.getDescription());
         return category;
     }

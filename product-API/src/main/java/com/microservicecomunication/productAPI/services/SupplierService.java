@@ -15,6 +15,10 @@ public class SupplierService {
     @Autowired
     private SupplierRepository supplierRepository;
 
+    public SupplierDTO findById(int id){
+        return new SupplierDTO().dto(supplierRepository.findById(id).get());
+    }
+
     public List<SupplierDTO> findAll(){
         return supplierRepository.findAll().stream().map(SupplierDTO::dto).toList();
     }

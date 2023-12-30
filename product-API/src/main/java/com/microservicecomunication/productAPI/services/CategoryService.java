@@ -19,6 +19,10 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    public CategoryDTO findById(int id){
+        return new CategoryDTO().of(categoryRepository.findById(id).get());
+    }
+
     public List<CategoryDTO> findAll(){
         return categoryRepository.findAll().stream().map(CategoryDTO::of).toList();
     }
@@ -28,12 +32,6 @@ public class CategoryService {
         var category = CategoryDTO.copyDtoToEntity(dto);
         category = categoryRepository.save(category);
         return new CategoryDTO().of(category);
-    }
-
-    private void validateCategoryDto(CategoryDTO dto){
-        if(dto.getDescription().isEmpty()){
-            throw new ValidateException("The category description was not informed");
-        }
     }
 
     public void delete(int id) {
@@ -46,6 +44,12 @@ public class CategoryService {
             }
         }catch (DataIntegrityViolationException e){
             throw new ValidateException("Data integrity violation exception");
+        }
+    }
+
+    private void validateCategoryDto(CategoryDTO dto){
+        if(dto.getDescription().isEmpty()){
+            throw new ValidateException("The category description was not informed");
         }
     }
 }

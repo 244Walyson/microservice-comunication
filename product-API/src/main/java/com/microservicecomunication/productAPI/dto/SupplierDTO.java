@@ -19,6 +19,7 @@ public class SupplierDTO {
 
     public static Supplier copyDtoToEntity(SupplierDTO dto){
         var supplier = new Supplier();
+        supplier.setId(dto.getId());
         supplier.setName(dto.getName());
         return supplier;
     }
