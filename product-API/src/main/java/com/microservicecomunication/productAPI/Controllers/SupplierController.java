@@ -18,8 +18,13 @@ public class SupplierController {
     private SupplierService supplierService;
 
     @GetMapping
-    public ResponseEntity<List<SupplierDTO>> findAll(){
-        return ResponseEntity.ok(supplierService.findAll());
+    public ResponseEntity<List<SupplierDTO>> findAll(@RequestParam(name = "name", defaultValue = "") String name){
+        return ResponseEntity.ok(supplierService.findAll(name));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SupplierDTO> findById(@PathVariable int id){
+        return ResponseEntity.ok().body(supplierService.findById(id));
     }
 
     @PostMapping

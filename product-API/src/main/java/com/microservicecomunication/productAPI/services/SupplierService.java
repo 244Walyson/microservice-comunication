@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SupplierService {
@@ -25,8 +24,9 @@ public class SupplierService {
         return new SupplierDTO().dto(supplier);
     }
 
-    public List<SupplierDTO> findAll(){
-        return supplierRepository.findAll().stream().map(SupplierDTO::dto).toList();
+    public List<SupplierDTO> findAll(String name){
+        List<Supplier> suppliers = supplierRepository.findAllFilter(name);
+        return suppliers.stream().map(SupplierDTO::dto).toList();
     }
 
     public SupplierDTO save(SupplierDTO dto) {
