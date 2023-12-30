@@ -41,9 +41,8 @@ public class SupplierService {
 
     public void delete(int id){
         try {
-            Optional<Supplier> supplier = supplierRepository.findById(id);
-            if (supplier.isPresent()) {
-                supplierRepository.delete(supplier.get());
+            if (supplierRepository.existsById(id)) {
+                supplierRepository.delete(supplierRepository.findById(id).get());
             } else {
                 throw new ValidateException("Entity not found");
             }

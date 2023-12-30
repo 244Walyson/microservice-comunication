@@ -41,9 +41,8 @@ public class CategoryService {
 
     public void delete(int id) {
         try {
-            Optional<Category> category = categoryRepository.findById(id);
-            if (category.isPresent()) {
-                categoryRepository.delete(category.get());
+            if (categoryRepository.existsById(id)){
+                categoryRepository.delete(categoryRepository.findById(id).get());
             } else {
                 throw new ValidateException("Entity not found");
             }

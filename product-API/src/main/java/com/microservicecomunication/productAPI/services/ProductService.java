@@ -42,9 +42,8 @@ public class ProductService {
 
     public void delete(int id){
         try {
-            Optional<Product> product = productRepository.findById(id);
-            if (product.isPresent()) {
-                productRepository.delete(product.get());
+            if (productRepository.existsById(id)) {
+                productRepository.delete(productRepository.findById(id).get());
             } else {
                 throw new ValidateException("Entity not found");
             }
