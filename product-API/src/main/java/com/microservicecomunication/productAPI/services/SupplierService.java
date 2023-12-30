@@ -4,19 +4,26 @@ import com.microservicecomunication.productAPI.dto.SupplierDTO;
 import com.microservicecomunication.productAPI.entities.Supplier;
 import com.microservicecomunication.productAPI.exception.ValidateException;
 import com.microservicecomunication.productAPI.repositories.SupplierRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SupplierService {
 
+    private static final Logger logger = LoggerFactory.getLogger(SupplierService.class);
     @Autowired
     private SupplierRepository supplierRepository;
 
     public SupplierDTO findById(int id){
-        return new SupplierDTO().dto(supplierRepository.findById(id).get());
+        logger.info("aquiiiiiiiiiiiiiiiiiiiiiii "+id);
+        Supplier supplier = supplierRepository.findById(id).get();
+        logger.info(supplier.toString());
+        return new SupplierDTO().dto(supplier);
     }
 
     public List<SupplierDTO> findAll(){

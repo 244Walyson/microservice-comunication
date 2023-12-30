@@ -20,7 +20,7 @@ public class ProductService {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
-    private Integer ZERO = 0;
+    private final Integer ZERO = 0;
 
     @Autowired
     private ProductRepository productRepository;
@@ -40,7 +40,7 @@ public class ProductService {
     private Product copyDtoToEntity(ProductDTO dto){
         var product = new Product();
         Category cat = new CategoryDTO().copyDtoToEntity(categoryService.findById(dto.getCategory().getId()));
-        Supplier supplier = new SupplierDTO().copyDtoToEntity(supplierService.findById(dto.getCategory().getId()));
+        Supplier supplier = new SupplierDTO().copyDtoToEntity(supplierService.findById(dto.getSupplier().getId()));
         product.setName(dto.getName());
         product.setQuantityAvailable(dto.getQuantityAvailable());
         product.setCategory(cat);
@@ -55,7 +55,7 @@ public class ProductService {
             throw new ValidateException("Category coud not be null");
         } else if (dto.getSupplier().getId() == null) {
             throw new ValidateException("Supplier could not be null");
-        }else if (dto.getQuantityAvailable() == null || dto.getQuantityAvailable() <= 0){
+        }else if (dto.getQuantityAvailable() == null || dto.getQuantityAvailable() <= ZERO){
             throw new ValidateException("Quantity available must be zero or greater than zero and not null");
         }
     }
