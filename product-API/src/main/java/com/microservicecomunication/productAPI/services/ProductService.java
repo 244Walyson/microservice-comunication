@@ -30,7 +30,6 @@ public class ProductService {
     public SupplierService supplierService;
 
     public ProductDTO save(ProductDTO dto){
-        logger.info("hereeeeeeeeee");
         validateProductDto(dto);
         Product product = copyDtoToEntity(dto);
         logger.info(product.toString());
@@ -55,7 +54,7 @@ public class ProductService {
         } else if (dto.getCategory().getId() == null) {
             throw new ValidateException("Category coud not be null");
         } else if (dto.getSupplier().getId() == null) {
-            throw new ValidateException("Supplier coud not be null");
+            throw new ValidateException("Supplier could not be null");
         }else if (dto.getQuantityAvailable() == null || dto.getQuantityAvailable() <= 0){
             throw new ValidateException("Quantity available must be zero or greater than zero and not null");
         }
