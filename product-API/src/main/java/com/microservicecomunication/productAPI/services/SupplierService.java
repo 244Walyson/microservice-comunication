@@ -20,7 +20,6 @@ public class SupplierService {
     private SupplierRepository supplierRepository;
 
     public SupplierDTO findById(int id){
-        logger.info("aquiiiiiiiiiiiiiiiiiiiiiii "+id);
         Supplier supplier = supplierRepository.findById(id).get();
         logger.info(supplier.toString());
         return new SupplierDTO().dto(supplier);

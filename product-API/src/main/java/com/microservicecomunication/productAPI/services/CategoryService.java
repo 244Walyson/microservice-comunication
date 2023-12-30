@@ -52,4 +52,10 @@ public class CategoryService {
             throw new ValidateException("The category description was not informed");
         }
     }
+
+
+    public List<CategoryDTO> findByDescription(String description) {
+        List<Category> categories = categoryRepository.findAllByDescription(description);
+        return categories.stream().map(CategoryDTO::of).toList();
+    }
 }

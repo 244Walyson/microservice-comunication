@@ -34,4 +34,14 @@ public class CategoryController {
         categoryService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryDTO> findById(@PathVariable int id){
+        return ResponseEntity.ok().body(categoryService.findById(id));
+    }
+
+    @GetMapping("/description/{description}")
+    public ResponseEntity<List<CategoryDTO>> findByDescription(@PathVariable String description){
+        return ResponseEntity.ok().body(categoryService.findByDescription(description));
+    }
 }
