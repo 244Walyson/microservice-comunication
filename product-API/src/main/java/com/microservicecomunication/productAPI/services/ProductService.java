@@ -20,6 +20,8 @@ public class ProductService {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
+    private Integer ZERO = 0;
+
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -54,6 +56,8 @@ public class ProductService {
             throw new ValidateException("Category coud not be null");
         } else if (dto.getSupplier().getId() == null) {
             throw new ValidateException("Supplier coud not be null");
+        }else if (dto.getQuantityAvailable() == null || dto.getQuantityAvailable() <= 0){
+            throw new ValidateException("Quantity available must be zero or greater than zero and not null");
         }
     }
 
