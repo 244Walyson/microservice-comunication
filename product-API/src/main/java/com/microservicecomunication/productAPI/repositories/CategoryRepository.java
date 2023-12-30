@@ -9,5 +9,7 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
-    List<Category> findAllByDescription(String description);
-}
+    @Query(nativeQuery = true, value = """
+        SELECT category.id, category.description FROM category WHERE category.description LIKE CONCAT('%', :description, '%');
+        """)
+    List<Category> findAllByDescription(@Param("description") String description);}
