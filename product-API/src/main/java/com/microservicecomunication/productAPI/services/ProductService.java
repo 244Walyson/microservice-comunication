@@ -14,13 +14,16 @@ import com.microservicecomunication.productAPI.repositories.CategoryRepository;
 import com.microservicecomunication.productAPI.repositories.ProductRepository;
 import com.microservicecomunication.productAPI.repositories.SupplierRepository;
 import com.microservicecomunication.productAPI.services.rabbitmq.SalesConfirmationSender;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,6 +107,7 @@ public class ProductService {
         return prod.stream().map(ProductDTO::dto).toList();
     }
 
+    @Transactional
     public void updateProductStock(ProductStockDTO dto){
         try {
             validateProductStockDTO(dto);
@@ -116,6 +120,7 @@ public class ProductService {
     }
 
     public void updateStock(ProductStockDTO dto){
+        List<Product> productList = new ArrayList<>();
         dto
                 .getProducts()
                 .forEach(salesProduct -> {
@@ -127,8 +132,11 @@ public class ProductService {
                         throw new ValidateException("The product "+ salesProduct.getProductId() +" is out of stock");
                     }
                     product.get().updateStock(salesProduct.getQuantity());
-                    productRepository.save(product.get());
+                    productList.add(product.get());
                 });
+        if(!productList.isEmpty()){
+            productRepository.saveAll(productList);
+        }
     }
     public void validateProductStockDTO(ProductStockDTO dto){
         if(dto == null || dto.getSalesId().isEmpty()){
