@@ -1,8 +1,7 @@
 package com.microservicecomunication.productAPI.services;
 
-import com.microservicecomunication.productAPI.dto.CategoryDTO;
-import com.microservicecomunication.productAPI.dto.ProductDTO;
-import com.microservicecomunication.productAPI.dto.SupplierDTO;
+import com.microservicecomunication.productAPI.clients.SalesClient;
+import com.microservicecomunication.productAPI.dto.*;
 import com.microservicecomunication.productAPI.dto.rabbitmq.ProductStockDTO;
 import com.microservicecomunication.productAPI.dto.rabbitmq.SalesConfirmationDTO;
 import com.microservicecomunication.productAPI.entities.Category;
@@ -40,11 +39,13 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    public CategoryService categoryService;
+    private CategoryService categoryService;
     @Autowired
-    public SupplierService supplierService;
+    private SupplierService supplierService;
     @Autowired
-    public SalesConfirmationSender salesConfirmationSender;
+    private SalesConfirmationSender salesConfirmationSender;
+    @Autowired
+    private SalesClient salesClient;
 
     public ProductDTO save(ProductDTO dto){
         validateProductDto(dto);
@@ -119,6 +120,7 @@ public class ProductService {
         }
     }
 
+    @Transactional
     public void updateStock(ProductStockDTO dto){
         List<Product> productList = new ArrayList<>();
         dto
@@ -153,4 +155,14 @@ public class ProductService {
         });
     }
 
+    public ProductSalesDTO findProductSales(Integer id) {
+        Optional<Product> product = productRepository.findById(id);
+        try {
+            var sales = salesClient.findSalesByProductId(product.get().getId())
+                    .orElseThrow(() -> new ValidateException("The sales was not found by this product"));
+            return new ProductSalesDTO().of(product.get(), sales.getSalesIds());
+        }catch (Exception e){
+            throw new ValidateException("Error os find product sales " + e.getMessage());
+        }
+    }
 }

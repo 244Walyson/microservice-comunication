@@ -1,6 +1,7 @@
 package com.microservicecomunication.productAPI.Controllers;
 
 import com.microservicecomunication.productAPI.dto.ProductDTO;
+import com.microservicecomunication.productAPI.dto.ProductSalesDTO;
 import com.microservicecomunication.productAPI.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,4 +43,8 @@ public class ProductController {
         return ResponseEntity.ok().body(dto);
     }
 
+    @GetMapping("{id}/sales")
+    public ResponseEntity<ProductSalesDTO> findProductSales(@PathVariable Integer id){
+        return ResponseEntity.ok().body(productService.findProductSales(id));
+    }
 }
