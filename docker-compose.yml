@@ -28,7 +28,7 @@ services:
     container_name: sales-db
     restart: always
     environment:  
-      - MONGODB_DATABASE=mydatabase
+      - MONGODB_DATABASE=sales-db
       - MONGODB_USER=admin
       - MONGODB_PASSWORD=123456
     ports: 
