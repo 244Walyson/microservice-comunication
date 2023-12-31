@@ -1,16 +1,16 @@
 import express from "express";
-import { connect } from "./src/config/db/MongoDbConfig.js";
+import { connectMongoDb } from "./src/config/db/MongoDbConfig.js";
 import { createInitialData } from "./src/config/db/InitialData.js";
 import SalesRoute from "./src/modules/sales/routes/SalesRoute.js";
+import { connectRabbitMq } from "./src/rabbitmq/RabbitConfig.js";
 
 const app = express();
 const env = process.env;
 const PORT = env.port || 8082;
 
-connect();
-
+connectMongoDb();
 createInitialData();
-
+connectRabbitMq();
 app.use(SalesRoute);
 
 app.get("/api/status", (req, res) => {
