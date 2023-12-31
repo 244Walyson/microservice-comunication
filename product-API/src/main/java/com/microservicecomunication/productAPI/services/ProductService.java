@@ -25,9 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.apache.logging.log4j.ThreadContext.isEmpty;
 
@@ -108,6 +106,7 @@ public class ProductService {
 
     public List<ProductDTO> findAll() {
         List<Product> prod = productRepository.findAll();
+        Collections.sort(prod, Comparator.comparing(Product::getId));
         return prod.stream().map(ProductDTO::dto).toList();
     }
 
