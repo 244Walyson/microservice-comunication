@@ -3,6 +3,7 @@ package com.microservicecomunication.productAPI.services;
 import com.microservicecomunication.productAPI.dto.CategoryDTO;
 import com.microservicecomunication.productAPI.dto.ProductDTO;
 import com.microservicecomunication.productAPI.dto.SupplierDTO;
+import com.microservicecomunication.productAPI.dto.rabbitmq.ProductStockDTO;
 import com.microservicecomunication.productAPI.entities.Category;
 import com.microservicecomunication.productAPI.entities.Product;
 import com.microservicecomunication.productAPI.entities.Supplier;
@@ -92,5 +93,9 @@ public class ProductService {
     public List<ProductDTO> findAll() {
         List<Product> prod = productRepository.findAll();
         return prod.stream().map(ProductDTO::dto).toList();
+    }
+
+    public void updateProductStock(ProductStockDTO dto){
+
     }
 }
