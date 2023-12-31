@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
 
 @FeignClient(
-        name = "salesCLient",
+        name = "salesClient",
         contextId = "salesClient",
-        url = "${app-config.service.sales}"
+        url = "${app-config.services.sales}"
 )
 public interface SalesClient {
 
-    @GetMapping("/products/{productId}")
-    Optional<SalesProductDTO> findSalesByProductId(@PathVariable Integer productId);
+    @GetMapping("/products/{id}")
+    Optional<SalesProductDTO> findSalesByProductId(@PathVariable Integer id);
 }

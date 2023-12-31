@@ -2,6 +2,7 @@ package com.microservicecomunication.productAPI.services;
 
 import com.microservicecomunication.productAPI.clients.SalesClient;
 import com.microservicecomunication.productAPI.dto.*;
+import com.microservicecomunication.productAPI.dto.rabbitmq.ProductQuantityDTO;
 import com.microservicecomunication.productAPI.dto.rabbitmq.ProductStockDTO;
 import com.microservicecomunication.productAPI.dto.rabbitmq.SalesConfirmationDTO;
 import com.microservicecomunication.productAPI.entities.Category;
@@ -13,12 +14,14 @@ import com.microservicecomunication.productAPI.repositories.CategoryRepository;
 import com.microservicecomunication.productAPI.repositories.ProductRepository;
 import com.microservicecomunication.productAPI.repositories.SupplierRepository;
 import com.microservicecomunication.productAPI.services.rabbitmq.SalesConfirmationSender;
+import com.sun.net.httpserver.Authenticator;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -163,6 +166,25 @@ public class ProductService {
             return new ProductSalesDTO().of(product.get(), sales.getSalesIds());
         }catch (Exception e){
             throw new ValidateException("Error os find product sales " + e.getMessage());
+        }
+    }
+
+    public ResponseEntity productCheckStock(ProductCheckStockDTO dto) {
+        if (dto.getProducts().isEmpty()){
+            throw new ValidateException("The request data mus be informed");
+        }
+        dto.getProducts()
+                .forEach(this::validateStock);
+        return ResponseEntity.ok().build();
+    }
+
+    private void validateStock(ProductQuantityDTO productQuatity) {
+        if(productQuatity.getProductId() == null || productQuatity.getQuantity() == null){
+            throw new ValidateException("Product Id and quantity must be informed");
+        }
+        var product = productRepository.findById(productQuatity.getProductId());
+        if (productQuatity.getQuantity() > product.get().getQuantityAvailable()){
+            throw new ValidateException("The product "+ productQuatity.getProductId() + " is out of stock");
         }
     }
 }

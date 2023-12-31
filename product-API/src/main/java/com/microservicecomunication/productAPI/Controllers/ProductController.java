@@ -1,9 +1,11 @@
 package com.microservicecomunication.productAPI.Controllers;
 
+import com.microservicecomunication.productAPI.dto.ProductCheckStockDTO;
 import com.microservicecomunication.productAPI.dto.ProductDTO;
 import com.microservicecomunication.productAPI.dto.ProductSalesDTO;
 import com.microservicecomunication.productAPI.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -43,8 +45,16 @@ public class ProductController {
         return ResponseEntity.ok().body(dto);
     }
 
-    @GetMapping("{id}/sales")
+    @GetMapping("/{id}/sales")
     public ResponseEntity<ProductSalesDTO> findProductSales(@PathVariable Integer id){
         return ResponseEntity.ok().body(productService.findProductSales(id));
+    }
+
+    @PostMapping("/check-stock")
+    public ResponseEntity productCheckStock(ProductCheckStockDTO dto){
+        if (productService.productCheckStock(dto).getStatusCode().value() == HttpStatus.OK.value()){
+            return ResponseEntity.ok().body("The stock is ok");
+        }
+        return ResponseEntity.badRequest().build();
     }
 }
