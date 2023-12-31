@@ -170,8 +170,9 @@ public class ProductService {
     }
 
     public ResponseEntity productCheckStock(ProductCheckStockDTO dto) {
+        logger.info(dto.toString());
         if (dto.getProducts().isEmpty()){
-            throw new ValidateException("The request data mus be informed");
+            throw new ValidateException("The request data must be informed");
         }
         dto.getProducts()
                 .forEach(this::validateStock);
@@ -183,6 +184,9 @@ public class ProductService {
             throw new ValidateException("Product Id and quantity must be informed");
         }
         var product = productRepository.findById(productQuatity.getProductId());
+        if (product.isEmpty()){
+            throw new ValidateException("The id"+ product.get().getId() +"is not valid ");
+        }
         if (productQuatity.getQuantity() > product.get().getQuantityAvailable()){
             throw new ValidateException("The product "+ productQuatity.getProductId() + " is out of stock");
         }

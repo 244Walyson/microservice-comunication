@@ -51,7 +51,7 @@ public class ProductController {
     }
 
     @PostMapping("/check-stock")
-    public ResponseEntity productCheckStock(ProductCheckStockDTO dto){
+    public ResponseEntity productCheckStock(@RequestBody ProductCheckStockDTO dto){
         if (productService.productCheckStock(dto).getStatusCode().value() == HttpStatus.OK.value()){
             return ResponseEntity.ok().body("The stock is ok");
         }
