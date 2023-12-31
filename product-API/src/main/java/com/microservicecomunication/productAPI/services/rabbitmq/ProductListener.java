@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class ProductListener {
 
@@ -16,7 +17,8 @@ public class ProductListener {
     private ProductService productService;
 
     @RabbitListener(queues = "${app-config.rabbit.queue.product-stock}")
-    public void receiveProductStockMessage(ProductStockDTO dto) {
-        productService.updateProductStock(dto);
+    public void receiveProductStockMessage(ProductStockDTO message) throws JsonProcessingException {
+        log.info("message received " + new ObjectMapper().writeValueAsString(message));
+        productService.updateProductStock(message);
     }
 }
