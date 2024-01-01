@@ -38,7 +38,8 @@ class OrderService {
     
     async updateOrder(orderMessage){
         try{
-            const order = JSON.parse(orderMessage);
+            const order = JSON.parse(orderMessage.content);
+            console.info(order)
             if(order.salesId && order.status){
                 let existingOrder = await OrderRepository.findById(order.salesId);
                 if(order.status !== existingOrder.status){
@@ -51,7 +52,7 @@ class OrderService {
             }
         }catch(err){
             console.error("could not parse order message from queue");
-            console.error(err.message);
+            console.error(err);
         }
     }
 
