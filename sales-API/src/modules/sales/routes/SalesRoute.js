@@ -8,14 +8,10 @@ const SalesRoute = new Router();
 
 SalesRoute.use(CheckToken);;
 
-SalesRoute.post("/api/order/create", OrderController.createOrder);
-
-SalesRoute.post("/api/sim", (req, res) => {
-    let order = OrderController.createOrder(req, res);
-    return res.status(200).json(order.body);
-});
-
-SalesRoute.use(CheckToken);
+SalesRoute.post("/api/orders/create", OrderController.createOrder);
+SalesRoute.get("/api/orders/:id", OrderController.findById)
+SalesRoute.get("/api/orders", OrderController.findAll);
+SalesRoute.get("/api/orders/products/:productId");
 
 
 export default SalesRoute;

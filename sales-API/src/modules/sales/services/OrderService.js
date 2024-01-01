@@ -91,6 +91,62 @@ class OrderService {
         }
         sendMessageToProductUpdateQueue(message);
     }
+
+    async findById(req){
+        const { id } = req.param;
+        this.validateInformedId(id);
+        const order = OrderRepository.findById(id);
+        try{
+            return {
+                status: SUCCESS,
+                order
+            }
+        }catch(err){
+            return{
+                status: err.status ? err.status : BAD_REQUEST
+            }
+        }
+    }
+
+    async findByProductId(req){
+        const { id } = req.param;
+        this.validateInformedId(id);
+        const order = OrderRepository.findByProductId(id);
+        try{
+            return {
+                status: SUCCESS,
+                order
+            }
+        }catch(err){
+            return{
+                status: err.status ? err.status : BAD_REQUEST
+            }
+        }
+    }
+
+    async findAll(){
+        const orders = await OrderRepository.findAll();
+        console.info(orders);
+        try{
+            return {
+                status: SUCCESS,
+                orders
+            }
+        }catch(err){
+            return {
+                status: err.status ? err.status : BAD_REQUEST
+            }
+        }
+    }
+
+    validateInformedId(id){
+        if(!id){
+            return new OrderException(
+                BAD_REQUEST,
+                "The order id must be informed"
+            );
+        }
+    }
 }
 
 export default new OrderService();

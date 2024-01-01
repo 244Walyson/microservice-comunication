@@ -3,7 +3,22 @@ import OrderService from "../services/OrderService.js";
 class OrderController {
     async createOrder(req, res){
         let order = await OrderService.createOrder(req);
-        return res.status(order.status).json(order.body);
+        return res.status(order.status).json(order);
+    }
+
+    async findById(req, res){
+        let order = await OrderService.findById()
+        return res.status(order.status).json(order);
+    }
+
+    async findAll(req, res){
+        let orders = await OrderService.findAll()
+        return res.status(orders.status).json(orders);
+    }
+
+    async findByProductId(req, res){
+        let orders = await OrderService.findByProductId(req)
+        return res.status(orders.status).json(orders);
     }
 }
 
