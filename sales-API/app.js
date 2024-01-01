@@ -8,6 +8,7 @@ const app = express();
 const env = process.env;
 const PORT = env.port || 8082;
 
+app.use(express.json());
 connectMongoDb();
 createInitialData();
 connectRabbitMq();

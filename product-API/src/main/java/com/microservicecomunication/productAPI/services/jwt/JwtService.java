@@ -21,6 +21,7 @@ public class JwtService {
     private final String EMPTY_SPACE = " ";
 
     public void validateAuthentication(String token){
+        logger.info(token);
         var accessToken = extractToken(token);
         try {
             var claims = Jwts

@@ -5,18 +5,25 @@ import { APPROVED, PENDING, REJECTED } from "../status/OrderStatus.js";
 import OrderException from "../exception/OrderException.js";
 import { BAD_REQUEST } from "../../../config/constants/HttpStatus.js";
 import ProductClient from "../../clients/ProductClient.js";
-class OrderService {
 
+
+class OrderService {
     async createOrder(req){
         try{
             let orderData = req.body;
-            this.validateOrderData(orderData.products);
             const { authUser } = req;
-            const { authorization } = req.header;
+            const { authorization } = req.headers;
+
+            this.validateOrderData(orderData.products);
+
             let order = this.createInitialOrderData(orderData, authUser);
+
             await this.validateProductStock(order, authorization);
+
             let createOrder = await OrderRepository.save(order);
+
             this.sendMessage(createOrder);
+
             return {
                 status: SUCCESS,
                 createOrder
@@ -68,8 +75,9 @@ class OrderService {
     }
 
     createInitialOrderData(orderData, authUser){
+        console.info(authUser)
         return {
-            user: authUser.user,
+            user: authUser.name,
             status: PENDING,
             createdAt: new Date(),
             updatedAt: new Date(),
