@@ -93,9 +93,11 @@ class OrderService {
     }
 
     async findById(req){
-        const { id } = req.param;
+        const { id } = req.params;
         this.validateInformedId(id);
-        const order = OrderRepository.findById(id);
+        console.info(id)
+        const order = await OrderRepository.findById(id);
+        console.info(order)
         try{
             return {
                 status: SUCCESS,
@@ -109,13 +111,15 @@ class OrderService {
     }
 
     async findByProductId(req){
-        const { id } = req.param;
-        this.validateInformedId(id);
-        const order = OrderRepository.findByProductId(id);
+        const { productId } = req.param;
+        this.validateInformedId(productId);
+        const orders = await OrderRepository.findByProductId(productId);
         try{
             return {
                 status: SUCCESS,
-                order
+                salesId: orders.map((order) => {
+                    return order.id
+                })
             }
         }catch(err){
             return{
@@ -126,7 +130,6 @@ class OrderService {
 
     async findAll(){
         const orders = await OrderRepository.findAll();
-        console.info(orders);
         try{
             return {
                 status: SUCCESS,

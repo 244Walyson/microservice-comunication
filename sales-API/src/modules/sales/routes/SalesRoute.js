@@ -11,7 +11,7 @@ SalesRoute.use(CheckToken);;
 SalesRoute.post("/api/orders/create", OrderController.createOrder);
 SalesRoute.get("/api/orders/:id", OrderController.findById)
 SalesRoute.get("/api/orders", OrderController.findAll);
-SalesRoute.get("/api/orders/products/:productId");
+SalesRoute.get("/api/orders/products/:productId", OrderController.findByProductId);
 
 
 export default SalesRoute;
