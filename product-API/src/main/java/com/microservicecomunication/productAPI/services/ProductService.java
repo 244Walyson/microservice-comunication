@@ -51,7 +51,7 @@ public class ProductService {
     public ProductDTO save(ProductDTO dto){
         validateProductDto(dto);
         Product product = copyDtoToEntity(dto);
-        logger.info(product.toString());
+        logger.info(product.toString() + "xxxx");
         product = productRepository.save(product);
         return new ProductDTO().dto(product);
     }

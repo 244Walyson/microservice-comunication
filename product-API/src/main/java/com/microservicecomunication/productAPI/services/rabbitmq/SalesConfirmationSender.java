@@ -16,7 +16,7 @@ public class SalesConfirmationSender {
     private RabbitTemplate rabbitTemplate;
     @Value("${app-config.rabbit.exchange.product}")
     private String productTopicExchange;
-    @Value("${app-config.rabbit.queue.sales-confirmation}")
+    @Value("${app-config.rabbit.routingKey.sales-confirmation}")
     private String salesConfirmationMq;
 
     public void sendSalesConfirmationMessage(SalesConfirmationDTO message){
