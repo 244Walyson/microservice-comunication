@@ -25,7 +25,7 @@ public class ProductSalesDTO {
     private LocalDateTime createdAt;
     private SupplierDTO supplier;
     private CategoryDTO category;
-    private List<String> sales;
+    private List<String> salesId;
 
     public static ProductSalesDTO of(Product entity, List<String> sales){
         var dto = new ProductSalesDTO();
@@ -35,7 +35,7 @@ public class ProductSalesDTO {
         dto.setQuantityAvailable(entity.getQuantityAvailable());
         dto.setCategory(new CategoryDTO().of(entity.getCategory()));
         dto.setSupplier(new SupplierDTO().dto(entity.getSupplier()));
-        dto.setSales(sales);
+        dto.setSalesId(sales);
         return dto;
     }
 

@@ -1,6 +1,7 @@
 package com.microservicecomunication.productAPI.config;
 
 import com.microservicecomunication.productAPI.config.interceptors.AuthInterception;
+import com.microservicecomunication.productAPI.config.interceptors.FeignClientAuthInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

@@ -162,7 +162,8 @@ public class ProductService {
         try {
             var sales = salesClient.findSalesByProductId(product.get().getId())
                     .orElseThrow(() -> new ValidateException("The sales was not found by this product"));
-            return new ProductSalesDTO().of(product.get(), sales.getSalesIds());
+            logger.info(sales.toString());
+            return new ProductSalesDTO().of(product.get(), sales.getSalesId());
         }catch (Exception e){
             throw new ValidateException("Error os find product sales " + e.getMessage());
         }

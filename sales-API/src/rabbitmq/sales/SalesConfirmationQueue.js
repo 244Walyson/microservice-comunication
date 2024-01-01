@@ -1,6 +1,7 @@
 import amqp, { connect } from "amqplib/callback_api.js"
 import { RABBIT_MQ_URL } from "../../config/constants/Secrets.js";
 import { SALES_CONFIRMATION_QUEUE } from "../queue.js"
+import OrderService from "../../modules/sales/services/OrderService.js";
 
 export function listenTosalesCOnfirmationQueue(){
     amqp.connect(RABBIT_MQ_URL, (error, connection) => {
@@ -14,6 +15,8 @@ export function listenTosalesCOnfirmationQueue(){
                 throw error;
             }
             channel.consume(SALES_CONFIRMATION_QUEUE, (message) => {
+                console.info("confirmation sale");
+                OrderService.updateOrder(message);
             });
         }, { noAck: true });
     });

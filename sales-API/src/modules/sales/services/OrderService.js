@@ -95,9 +95,7 @@ class OrderService {
     async findById(req){
         const { id } = req.params;
         this.validateInformedId(id);
-        console.info(id)
         const order = await OrderRepository.findById(id);
-        console.info(order)
         try{
             return {
                 status: SUCCESS,

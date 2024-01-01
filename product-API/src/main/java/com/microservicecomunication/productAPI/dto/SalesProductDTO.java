@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class SalesProductDTO {
 
-    private List<String> salesIds;
+    private List<String> salesId;
 }
