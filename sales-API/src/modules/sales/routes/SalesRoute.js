@@ -10,7 +10,9 @@ SalesRoute.post("/api/order/create", OrderController.createOrder);
 
 SalesRoute.get("/api/sim", (req, res) => {
     sendMessageToProductUpdateQueue(
-        [
+        {
+            "salesId": "api-sim",
+        "products": [
         {
             "productId": 1,
             "quantity": 2
@@ -23,7 +25,7 @@ SalesRoute.get("/api/sim", (req, res) => {
             "productId": 6,
             "quantity": 3
         }
-    ]
+    ]}
 );
     return res.status(200).json({
         "simmmmm": "simmmm"

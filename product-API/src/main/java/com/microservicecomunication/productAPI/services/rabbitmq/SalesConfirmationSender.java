@@ -3,6 +3,8 @@ package com.microservicecomunication.productAPI.services.rabbitmq;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservicecomunication.productAPI.dto.rabbitmq.SalesConfirmationDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
