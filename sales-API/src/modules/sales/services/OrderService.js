@@ -14,7 +14,7 @@ class OrderService {
             const { authUser } = req;
             const { authorization } = req.headers;
 
-            this.validateOrderData(orderData.products);
+            this.validateOrderData(orderData);
 
             let order = this.createInitialOrderData(orderData, authUser);
 
@@ -22,7 +22,7 @@ class OrderService {
 
             let createOrder = await OrderRepository.save(order);
 
-            this.sendMessage(createOrder);
+            await this.sendMessage(createOrder);
 
             return {
                 status: SUCCESS,
@@ -75,7 +75,6 @@ class OrderService {
     }
 
     createInitialOrderData(orderData, authUser){
-        console.info(authUser)
         return {
             user: authUser.name,
             status: PENDING,

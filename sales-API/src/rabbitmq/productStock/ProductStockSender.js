@@ -16,5 +16,6 @@ export function sendMessageToProductUpdateQueue(message){
             }
             channel.publish(PRODUCT_TOPIC, PRODUCT_STOCK_UPDATE_ROUTING_KEY, Buffer.from(messageToSend));
         }, { noAck: true });
+        console.info("succes on send message")
     });
 }

@@ -17,7 +17,6 @@ class ProductClient{
                 return true;
             }).catch((err) => {
                 console.info("false")
-                console.error(err)
                 return false;
             });
         } catch (error) {
