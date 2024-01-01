@@ -111,7 +111,7 @@ class OrderService {
     }
 
     async findByProductId(req){
-        const { productId } = req.param;
+        const { productId } = req.params;
         this.validateInformedId(productId);
         const orders = await OrderRepository.findByProductId(productId);
         try{
