@@ -1,5 +1,5 @@
 import { v4 as uuid4 } from "uuid";
-import { BAD_REQUEST } from "./constants/HttpStatus";
+import { BAD_REQUEST } from "./constants/HttpStatus.js";
 
 export default (req, res, next) => {
     let { transactionid } = req.headers;
@@ -11,5 +11,5 @@ export default (req, res, next) => {
     }
 
     req.headers.serviceid = uuid4();
-    return next;
+    return next();
 }
