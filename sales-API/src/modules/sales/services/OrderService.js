@@ -21,7 +21,7 @@ class OrderService {
 
             let order = this.createInitialOrderData(orderData, authUser);
 
-            await this.validateProductStock(order, authorization);
+            await this.validateProductStock(order, authorization, transactionid);
 
             let createOrder = await OrderRepository.save(order);
 
@@ -70,8 +70,8 @@ class OrderService {
         }
     }
 
-    async validateProductStock(order, token){
-        let stockIsOut = await ProductClient.checkProductStock(order.products, token);
+    async validateProductStock(order, token, transactionid){
+        let stockIsOut = await ProductClient.checkProductStock(order.products, token, transactionid);
             if(stockIsOut){
                 throw new OrderException(
                     BAD_REQUEST,

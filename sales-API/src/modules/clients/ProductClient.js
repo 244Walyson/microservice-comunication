@@ -2,10 +2,11 @@ import axios from "axios";
 import { PRODUCT_API_URL } from "../../config/constants/Secrets.js";
 
 class ProductClient{
-    async checkProductStock(products, token){
+    async checkProductStock(products, token, transactionid){
         try {
             const headers =  {
-                Authorization: `${token}`
+                Authorization: `${token}`,
+                transactionid
             };
             console.info(token);
             console.info(products);
