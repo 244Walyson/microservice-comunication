@@ -19,7 +19,7 @@ class OrderService {
 
             this.validateOrderData(orderData);
 
-            let order = this.createInitialOrderData(orderData, authUser);
+            let order = this.createInitialOrderData(orderData, authUser, transactionid, serviceid);
 
             await this.validateProductStock(order, authorization, transactionid);
 
@@ -80,13 +80,15 @@ class OrderService {
             }
     }
 
-    createInitialOrderData(orderData, authUser){
+    createInitialOrderData(orderData, authUser, transactionid, serviceid){
         return {
             user: authUser.name,
             status: PENDING,
             createdAt: new Date(),
             updatedAt: new Date(),
-            products: orderData
+            products: orderData,
+            transactionid: transactionid,
+            serviceid: serviceid
         }
     }
 

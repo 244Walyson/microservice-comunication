@@ -25,6 +25,8 @@ export async function createInitialData(){
         status: "APPROVED",
         createdAt: new Date(),
         updatedAt: new Date(),
+        transactionid: "srgnnds",
+        serviceid: "isngbiosdfn"
     });
     await Order.create({
         user: {
@@ -49,5 +51,7 @@ export async function createInitialData(){
         status: "REJECTED",
         createdAt: new Date(),
         updatedAt: new Date(),
+        transactionid: "srgnnds",
+        serviceid: "isngbiosdfn"
     });
 };
