@@ -10,32 +10,28 @@ import com.microservicecomunication.productAPI.entities.Product;
 import com.microservicecomunication.productAPI.entities.Supplier;
 import com.microservicecomunication.productAPI.enums.SalesStatus;
 import com.microservicecomunication.productAPI.exception.ValidateException;
-import com.microservicecomunication.productAPI.repositories.CategoryRepository;
 import com.microservicecomunication.productAPI.repositories.ProductRepository;
-import com.microservicecomunication.productAPI.repositories.SupplierRepository;
 import com.microservicecomunication.productAPI.services.rabbitmq.SalesConfirmationSender;
-import com.sun.net.httpserver.Authenticator;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 
 import java.util.*;
 
-import static org.apache.logging.log4j.ThreadContext.isEmpty;
+import static com.microservicecomunication.productAPI.config.interceptors.RequestUtils.getCurrentRequest;
 
 
 @Service
 public class ProductService {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
-
     private final Integer ZERO = 0;
+    private final String TRANSACTION_ID = "transactionid";
+    private final String SERVICE_ID = "serviceid";
 
     @Autowired
     private ProductRepository productRepository;
@@ -115,10 +111,10 @@ public class ProductService {
         try {
             validateProductStockDTO(dto);
             updateStock(dto);
-            salesConfirmationSender.sendSalesConfirmationMessage(new SalesConfirmationDTO(dto.getSalesId(), SalesStatus.APPROVED));
+            salesConfirmationSender.sendSalesConfirmationMessage(new SalesConfirmationDTO(dto.getSalesId(), SalesStatus.APPROVED, dto.getTransactionid()));
         }catch (Exception e){
             logger.info("Error while trying to update stock for message with error: {}", e.getMessage());
-            salesConfirmationSender.sendSalesConfirmationMessage(new SalesConfirmationDTO(dto.getSalesId(), SalesStatus.REJECTED));
+            salesConfirmationSender.sendSalesConfirmationMessage(new SalesConfirmationDTO(dto.getSalesId(), SalesStatus.REJECTED, dto.getTransactionid()));
         }
     }
 
@@ -162,7 +158,6 @@ public class ProductService {
         try {
             var sales = salesClient.findSalesByProductId(product.get().getId())
                     .orElseThrow(() -> new ValidateException("The sales was not found by this product"));
-            logger.info(sales.toString());
             return new ProductSalesDTO().of(product.get(), sales.getSalesId());
         }catch (Exception e){
             throw new ValidateException("Error os find product sales " + e.getMessage());
@@ -170,7 +165,6 @@ public class ProductService {
     }
 
     public ResponseEntity productCheckStock(ProductCheckStockDTO dto) {
-        logger.info(dto.toString());
         if (dto.getProducts().isEmpty()){
             throw new ValidateException("The request data must be informed");
         }

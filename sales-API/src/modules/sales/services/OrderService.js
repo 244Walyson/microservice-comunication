@@ -25,7 +25,7 @@ class OrderService {
 
             let createOrder = await OrderRepository.save(order);
 
-            await this.sendMessage(createOrder);
+            await this.sendMessage(createOrder, transactionid);
 
             let response = {
                 status: SUCCESS,
@@ -92,10 +92,11 @@ class OrderService {
         }
     }
 
-    sendMessage(createOrder){
+    sendMessage(createOrder, transactionid){
         const message = {
             salesId: createOrder.id,
-            products: createOrder.products
+            products: createOrder.products,
+            transactionid
         }
         sendMessageToProductUpdateQueue(message);
     }
