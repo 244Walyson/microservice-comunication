@@ -10,6 +10,9 @@ import ProductClient from "../../clients/ProductClient.js";
 class OrderService {
     async createOrder(req){
         try{
+            const { transactionid, serviceid } = req.headers;
+            console.info(`Request to POST order with data ${JSON.stringify(req.body)} | [transactionID: ${transactionid} | serviceID: ${serviceid}]`)
+           
             let orderData = req.body;
             const { authUser } = req;
             const { authorization } = req.headers;
@@ -24,10 +27,13 @@ class OrderService {
 
             await this.sendMessage(createOrder);
 
-            return {
+            let response = {
                 status: SUCCESS,
                 createOrder
             }
+            console.info(`Request to POST order with data ${JSON.stringify(response)} | [transactionID: ${transactionid} | serviceID: ${serviceid}]`)
+
+            return response;
         }catch(err){
             return {
                 status: err.status ? err.status : INTERNAL_SERVER_ERROR,
@@ -39,7 +45,6 @@ class OrderService {
     async updateOrder(orderMessage){
         try{
             const order = JSON.parse(orderMessage.content);
-            console.info(order)
             if(order.salesId && order.status){
                 let existingOrder = await OrderRepository.findById(order.salesId);
                 if(order.status !== existingOrder.status){
