@@ -17,7 +17,7 @@ class UserService {
             let user = await UserRepository.findByEmail(email);
             this.validateUserNotFound(user);
             this.validateAuthenticateedUser(user, authUser)
-            return {
+            let response = {
                 status: httpStatus.SUCCESS,
                 user: {
                     id: user.id,
@@ -25,6 +25,7 @@ class UserService {
                     email: user.email,
                 },
             }
+            return response
         } catch (err) {
             return {
                 status: err.status ? err.status : httpStatus.INTERNAL_SERVER_ERROR,
@@ -46,6 +47,9 @@ class UserService {
 
     async getAccessToken(req) {
         try {
+            const { transactionid, serviceid } = req.headers;
+            console.info(`Request to POST order with data ${JSON.stringify(req.body)} | [transactionID: ${transactionid} | serviceID: ${serviceid}]`)
+
             const { email, password } = req.body;
             this.validateAccessTokenData(email, password);
             let user = await UserRepository.findByEmail(email);
@@ -53,10 +57,13 @@ class UserService {
             await this.validatePassword(password, user.password)
             let authUser = { id: user.id, name: user.name, email: user.email };
             const accessToken = jwt.sign({ authUser }, secrets.API_SECRET, { expiresIn: '1d'})
-            return {
+            let response =  {
                 status: httpStatus.SUCCESS,
                 accessToken,
             }
+            console.info(`Request to POST order with data ${JSON.stringify(response)} | [transactionID: ${transactionid} | serviceID: ${serviceid}]`)
+
+            return response;
         } catch (err) {
             return {
                 status: err.status ? err.status : httpStatus.INTERNAL_SERVER_ERROR,
