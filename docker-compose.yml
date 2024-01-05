@@ -104,7 +104,7 @@ services:
   
   rabbit:
       image: rabbitmq:3-management
-      container_name: sales-rabbit
+      container_name: rabbit
       hostname:  rabbit
       restart: always
       networks:

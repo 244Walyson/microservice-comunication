@@ -2,8 +2,7 @@ import jwt from "jsonwebtoken";
 import { promisify } from "util";
 import * as httpStatus from "../constants/HttpStatus.js"
 import * as secrets from "../constants/Secrets.js"
-import AuthException from "../../../../auth-api/src/config/auth/AuthException.js";
-
+import AuthException from "./AuthException.js";
 
 const emptySpace = " ";
 

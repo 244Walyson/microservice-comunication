@@ -19,9 +19,9 @@ const User = sequelize.define("user", {
         type: Sequelize.STRING,
         allowNull: false
     }},
-    {
-        tableName: "user"
-    }
+    {}
 )
+
+sequelize.sync();
 
 export default User;

@@ -2,8 +2,8 @@ import express from "express";
 import { connectMongoDb } from "./src/config/db/MongoDbConfig.js";
 import { createInitialData } from "./src/config/db/InitialData.js";
 import SalesRoute from "./src/modules/sales/routes/SalesRoute.js";
-import { connectRabbitMq } from "./src/rabbitmq/RabbitConfig.js";
 import Tracing from "./src/config/Tracing.js";
+import { connectRabbitMq } from "./src/rabbitmq/rabbitConfig.js"
 
 const app = express();
 const env = process.env;
