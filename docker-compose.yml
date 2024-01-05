@@ -95,7 +95,7 @@ services:
       environment:
         - PORT=8082
         - API_SECRET=YXV0aC1hcGktc2VjcmV0LWNvbnRhaW5lci0yMDI0
-        - MONGO_DB_URL=mongodb://admin:123456@sales-db:27017/sales-db
+        - MONGO_DB_URL=mongodb://sales-db:27017
         - RABBIT_MQ_URL=amqp://rabbit:5672
         - PRODUCT_API_URL=http://localhost:8081/products
       ports: 
