@@ -4,6 +4,7 @@ import com.microservicecomunication.productAPI.dto.CategoryDTO;
 import com.microservicecomunication.productAPI.entities.Category;
 import com.microservicecomunication.productAPI.exception.ValidateException;
 import com.microservicecomunication.productAPI.repositories.CategoryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.annotation.ReadOnlyProperty;
@@ -20,7 +21,10 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     public CategoryDTO findById(int id){
-        return new CategoryDTO().of(categoryRepository.findById(id).get());
+        Category category = categoryRepository.findById(id).orElseThrow(() -> {
+            throw new EntityNotFoundException("Id not found");
+        });
+        return new CategoryDTO().of(category);
     }
 
     public List<CategoryDTO> findAll(){
@@ -42,16 +46,16 @@ public class CategoryService {
     public void delete(int id) {
         try {
             if (categoryRepository.existsById(id)){
-                categoryRepository.delete(categoryRepository.findById(id).get());
+                categoryRepository.deleteById(id);
             } else {
-                throw new ValidateException("Entity not found");
+                throw new EntityNotFoundException("Entity not found");
             }
         }catch (DataIntegrityViolationException e){
             throw new ValidateException("Data integrity violation exception");
         }
     }
 
-    private void validateCategoryDto(CategoryDTO dto){
+    public void validateCategoryDto(CategoryDTO dto){
         if(dto.getDescription().isEmpty()){
             throw new ValidateException("The category description was not informed");
         }
@@ -59,6 +63,9 @@ public class CategoryService {
 
     public CategoryDTO update(CategoryDTO dto, int id) {
         validateCategoryDto(dto);
+        if(!categoryRepository.existsById(id)){
+            throw new EntityNotFoundException("Id not found");
+        }
         Category cat = categoryRepository.findById(id).get();
         cat.setDescription(dto.getDescription());
         categoryRepository.save(cat);
